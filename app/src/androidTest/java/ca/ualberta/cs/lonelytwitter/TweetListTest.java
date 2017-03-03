@@ -1,6 +1,7 @@
 package ca.ualberta.cs.lonelytwitter;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,10 +21,7 @@ public class TweetListTest extends ActivityInstrumentationTestCase2 {
     public void testAddTweet() {
 
         TweetList tweets = new TweetList();
-
-        Tweet tweet = null;
-
-        tweet = new NormalTweet("test tweet");
+        NormalTweet tweet = new NormalTweet("new tweet");
 
         tweets.add(tweet);
         assertTrue(tweets.hasTweet(tweet));
@@ -32,14 +30,13 @@ public class TweetListTest extends ActivityInstrumentationTestCase2 {
 
         try {
             tweets.add(tweet);
-        }
-
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             exceptionThrown = true;
         }
 
         assertTrue(exceptionThrown);
     }
+
     public void testGetTweet() {
 
         ArrayList<Tweet> sortedTweets;
@@ -71,19 +68,13 @@ public class TweetListTest extends ActivityInstrumentationTestCase2 {
     public void testHasTweet() {
 
         TweetList tweets = new TweetList();
-
-        Tweet tweet = null;
-        tweet = new NormalTweet("test tweet");
-
+        NormalTweet tweet = new NormalTweet("test tweet");
         assertFalse(tweets.hasTweet(tweet));
-
         tweets.add(tweet);
         assertTrue(tweets.hasTweet(tweet));
 
         tweet = new NormalTweet("test tweet 2");
-
         assertFalse(tweets.hasTweet(tweet));
-
         tweets.add(tweet);
         assertTrue(tweets.hasTweet(tweet));
     }
@@ -93,10 +84,7 @@ public class TweetListTest extends ActivityInstrumentationTestCase2 {
         TweetList tweets = new TweetList();
         assertEquals(tweets.getCount(), 0);
 
-        Tweet tweet = null;
-
-        tweet = new NormalTweet("test tweet");
-
+        NormalTweet tweet = new NormalTweet("this tweet");
         tweets.add(tweet);
         assertEquals(tweets.getCount(), 1);
 
@@ -110,16 +98,35 @@ public class TweetListTest extends ActivityInstrumentationTestCase2 {
     public void testDeleteTweet() {
 
         TweetList tweets = new TweetList();
-
-        Tweet tweet = null;
-
-        tweet = new NormalTweet("Last tweet");
-
+        NormalTweet tweet = new NormalTweet("last tweet");
         tweets.add(tweet);
         tweets.delete(tweet);
-
         assertFalse(tweets.hasTweet(tweet));
     }
+
+    public void testSortedTweets() {
+        TweetList tweets1 = new TweetList();
+        ArrayList<NormalTweet> originalTweets = new ArrayList<NormalTweet>();
+        NormalTweet firstTweet = new NormalTweet("First Tweet");
+        NormalTweet secondTweet = new NormalTweet("Second Tweet");
+
+        tweets1.add(firstTweet);
+        tweets1.add(secondTweet);
+
+        originalTweets = tweets1.getTweets();
+
+        NormalTweet first = originalTweets.get(0);
+        NormalTweet second = originalTweets.get(1);
+
+        try {
+            assertEquals(first.getMessage(), firstTweet.getMessage());
+            assertEquals(second.getMessage(), secondTweet.getMessage());
+        } catch (Exception e) {
+            Log.i("Error", "Mess up with order");
+        }
+
+    }
+}
 
 
 
